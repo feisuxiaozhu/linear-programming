@@ -1,6 +1,8 @@
 from numpy import *
 from itertools import *
 import math
+import numpy, scipy.io
+
 #The goal is to generate f, A, b, A_eq, b_eq, lb as input for matlab LP solver.
 
 def validateX(x,N): #find if x is of pure form 00000001111111
@@ -64,13 +66,11 @@ def generateA(N):
             A[2*i] = 1
             A[2*i+1]=1
         else:
-            A[2*i] = 0
-            A[2*i+1] = 0
+            A[2*i] = 1
+            A[2*i+1] = 1
     return A
 def generateb():
-    b = zeros(1)
-    b[0] = 1
-    return b
+    return 1.
 
 #here we require A_eq*x = b_eq = 0, for low degree correspondence.
 #generate sub matrix rows corresponding to rows in A for chi with degree d
@@ -119,15 +119,17 @@ def nCr(n,r):
     return f(n) / f(r) / f(n-r)
 
 def generateBeq(d,N):
+    temp=[]
     res = 1
     for i in range(1,d+1):
         res += nCr(N,i)
     res = int(res)
-    temp = zeros(res)
+    for j in range(res):
+        temp.append(0.)
     return temp
 
-N=2
-d=1
+N=16
+d=3
 
 f = generateF(N)
 A = generateA(N)
@@ -135,4 +137,9 @@ b = generateb()
 lb = generatelb(N)
 Aeq = generateAeq(d,N)
 beq = generateBeq(d,N)
-print(f, A, b, lb, Aeq, beq)
+# Aeq.append(A)
+# beq.append(b)
+
+print(A)
+#print(f, A, b, lb, Aeq, beq)
+scipy.io.savemat('./', mdict={'f': f, 'A':A, 'b':b, 'lb':lb, 'Aeq':Aeq,'beq':beq})
