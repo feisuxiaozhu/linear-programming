@@ -76,13 +76,29 @@ def AeqRowHelper(degree,N):
         return res
     s = list(range(N))
     powerS = list(combinations(s,degree)) #generate all possible subset of s, where each element has length = degree
-    for i in powerS:
-        for j in i:
-            print(j)
-    return powerS
+    #print(powerS)
+    res=[]
+    for xIndices in powerS:
+        #print(xIndices)
+        temp = zeros(2*pow(2,N))
+        for i in range (pow(2,N)):
+            length = '{0:0' + str(N) + 'b}'
+            x = str(length.format(i))
+            #print(x)
+            temp[2*i] = 1
+            temp[2*i+1] = -1
+            for xIndex in xIndices:
+                bit = int(x[xIndex])
+                temp[2*i] *= -1*pow(-1,bit)
+                temp[2*i+1] *= -1*pow(-1,bit)
+        res.append(temp)
+    return res
 
 
 N=2
 d=1
 
-AeqRowHelper(1,N)
+res = AeqRowHelper(1,N)
+for row in res:
+    print(row)
+
