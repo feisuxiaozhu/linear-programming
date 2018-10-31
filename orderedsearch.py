@@ -1,5 +1,6 @@
 from numpy import *
 from itertools import *
+import math
 #The goal is to generate f, A, b, A_eq, b_eq, lb as input for matlab LP solver.
 
 def validateX(x,N): #find if x is of pure form 00000001111111
@@ -52,10 +53,19 @@ def generatelb(N):
     return lb
 
 #this function specifies the constraint Ax<=b, in our case the l-1 norm <=1
+#let psi(x) = 0, on all impure input x. i.e. x=010000 or 1111111 or 1111000000
 def generateA(N):
     A = zeros(2*pow(2,N))
-    for i in range(len(A)):
-        A[i] = 1
+    for i in range(pow(2,N)):
+        length = '{0:0' + str(N) + 'b}'
+        x = str(length.format(i))
+        #print(x)
+        if validateX(x,N):
+            A[2*i] = 1
+            A[2*i+1]=1
+        else:
+            A[2*i] = 0
+            A[2*i+1] = 0
     return A
 def generateb():
     b = zeros(1)
@@ -67,13 +77,15 @@ def generateb():
 #we will combine all these sub matrices for A_eq
 def AeqRowHelper(degree,N):
     if degree == 0:
+        temp=[]
         res = zeros(2*pow(2,N))
         for i in range(len(res)):
             if i%2 == 0:
                 res[i]=1
             else:
                 res[i]=-1
-        return res
+        temp.append(res)
+        return temp
     s = list(range(N))
     powerS = list(combinations(s,degree)) #generate all possible subset of s, where each element has length = degree
     #print(powerS)
@@ -94,11 +106,33 @@ def AeqRowHelper(degree,N):
         res.append(temp)
     return res
 
+def generateAeq(d, N): #generate Aeq corresponding to Chi(x) at most degree d
+    res = []
+    for degree in range(d+1):
+        temp = AeqRowHelper(degree, N)
+        for row in temp:
+            res.append(row)
+    return res
+
+def nCr(n,r):
+    f = math.factorial
+    return f(n) / f(r) / f(n-r)
+
+def generateBeq(d,N):
+    res = 1
+    for i in range(1,d+1):
+        res += nCr(N,i)
+    res = int(res)
+    temp = zeros(res)
+    return temp
 
 N=2
 d=1
 
-res = AeqRowHelper(1,N)
-for row in res:
-    print(row)
-
+f = generateF(N)
+A = generateA(N)
+b = generateb()
+lb = generatelb(N)
+Aeq = generateAeq(d,N)
+beq = generateBeq(d,N)
+print(f, A, b, lb, Aeq, beq)
