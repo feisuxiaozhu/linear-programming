@@ -128,8 +128,8 @@ def generateBeq(d,N):
         temp.append(0.)
     return temp
 
-N=16
-d=3
+N=3
+d=0
 
 f = generateF(N)
 A = generateA(N)
@@ -140,6 +140,6 @@ beq = generateBeq(d,N)
 # Aeq.append(A)
 # beq.append(b)
 
-print(A)
+
 #print(f, A, b, lb, Aeq, beq)
 scipy.io.savemat('./', mdict={'f': f, 'A':A, 'b':b, 'lb':lb, 'Aeq':Aeq,'beq':beq})
