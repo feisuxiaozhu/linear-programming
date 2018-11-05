@@ -93,7 +93,7 @@ def AeqRowHelper(degree,N):
     for xIndices in powerS:
         #print(xIndices)
         temp = zeros(2*pow(2,N))
-        for i in range (pow(2,N)):
+        for i in range(pow(2,N)):
             length = '{0:0' + str(N) + 'b}'
             x = str(length.format(i))
             #print(x)
