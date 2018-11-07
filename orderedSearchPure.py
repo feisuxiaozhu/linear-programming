@@ -59,6 +59,7 @@ def AeqRowHelper(degree, N):
         return temp
     s = list(range(N))
     powerS = list(combinations(s, degree))
+    print(powerS)
     res = []
     inputs = generatePureInputs(N)
     for xIndices in powerS:
@@ -96,15 +97,21 @@ def generateBeq(d,N):
         temp.append(0.)
     return temp
 
-N=3
-d=0
+def generateBeqV2(Aeq):
+    temp = []
+    for i in range(len(Aeq)):
+        temp.append(0.)
+    return temp
+
+N=4
+d=1
 
 f = generateF(N)
 A = generateA(N)
 b = generateb()
 lb = generatelb(N)
 Aeq = generateAeq(d,N)
-beq = generateBeq(d,N)
+beq = generateBeqV2(Aeq)
 scipy.io.savemat('./pure.mat', mdict={'f': f, 'A':A, 'b':b, 'lb':lb, 'Aeq':Aeq,'beq':beq})
 
 
