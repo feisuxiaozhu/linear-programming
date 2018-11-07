@@ -77,7 +77,6 @@ def AeqRowHelper(degree, N, inputs):
         return temp
     s = list(range(N))
     powerS = list(combinations(s, degree))
-    print(powerS)
     res = []
 
     for xIndices in powerS:
