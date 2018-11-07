@@ -64,7 +64,7 @@ def generateA(N):
 def generateb():
     return 1.
 
-def AeqRowHelper(degree, N):
+def AeqRowHelper(degree, N, inputs):
     if degree == 0:
         temp = []
         res = zeros(2*N)
@@ -77,9 +77,9 @@ def AeqRowHelper(degree, N):
         return temp
     s = list(range(N))
     powerS = list(combinations(s, degree))
+    print(powerS)
     res = []
-    inputs = generatePureInputs(N)
-    print(inputs)
+
     for xIndices in powerS:
         temp = zeros(2*N)
         for i in range(N):
@@ -95,8 +95,9 @@ def AeqRowHelper(degree, N):
 
 def generateAeq(d,N):
     res = []
+    inputs = generatePureInputs(N)
     for degree in range(d+1):
-        temp = AeqRowHelper(degree, N)
+        temp = AeqRowHelper(degree, N, inputs)
         for row in temp:
             res.append(row)
     return res
@@ -108,7 +109,7 @@ def generateBeq(Aeq):
     return temp
 
 N=4
-d=1
+d=2
 
 f = generateF(N)
 A = generateA(N)
