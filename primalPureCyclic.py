@@ -50,11 +50,31 @@ def generateAeq(degree,N):
     inputs = generatePureInputs(N)
     s = list(range(N))
     powerS = list(combinations(s,degree))
-    print(inputs)
-    print(powerS)
+    #print(inputs)
+    #print(powerS)
     res=[]
     for input in inputs:
         temp = ones(len(powerS))
+        for i in range(len(powerS)):
+            xIndices = powerS[i]
+            for xIndex in xIndices:
+                bit = int(input[xIndex])
+                temp[i] *= -1*pow(-1,bit)
+        res.append(temp)
+    return res
 
+def generateBeq(N):
+    inputs = generatePureInputs(N)
+    res = zeros(N)
+    for i in range(len(res)):
+        jump = findJump((inputs[i]))
+        res[i] = pow(-1,jump)
+    return res
 
-print(generateAeq(2,4))
+N=100
+degree = 2
+
+Aeq = generateAeq(degree, N)
+beq = generateBeq(N)
+
+scipy.io.savemat('./primalPureCyclic.mat', mdict={'Aeq':Aeq,'beq':beq})
